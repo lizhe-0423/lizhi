@@ -1,5 +1,6 @@
 package com.lizhi.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
@@ -12,11 +13,14 @@ import com.lizhi.common.ErrorCode;
 import com.lizhi.constant.CommonConstant;
 import com.lizhi.constant.UserConstant;
 import com.lizhi.mapper.UsersMapper;
+import com.lizhi.model.dto.user.UserByIdRequest;
 import com.lizhi.model.dto.user.UserSearchRequest;
 import com.lizhi.model.entity.Users;
 import com.lizhi.service.UsersService;
 import com.lizhi.utils.SqlUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 /**
 * @author <a href="https://github.com/lizhe-0423">lizhi</a>
@@ -24,12 +28,17 @@ import org.springframework.stereotype.Service;
 * @createDate 2023-10-07 17:45:20
 */
 @Service
+@Slf4j
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
     implements UsersService {
 
 
     @Override
     public Long userRegister(String userAccount, String userPassword) {
+        if(userAccount==null||userAccount.length()<CommonConstant.FIELD_MAX.getFieldMax()
+                ||userPassword==null||userPassword.length()<CommonConstant.FIELD_MAX.getFieldMax()){
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"请输入正确的用户名或密码");
+        }
         LambdaQueryWrapper<Users> usersLambdaQueryWrapper = new LambdaQueryWrapper<>();
         usersLambdaQueryWrapper.eq(Users::getUserAccount,userAccount);
         Users userQuery = this.getOne(usersLambdaQueryWrapper);
@@ -90,8 +99,16 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
                 sortOrder.equals(CommonConstant.PAGE_SORT_ORDER_ASC.toString()), sortField);
         return queryWrapper;
     }
-
-
+    @Override
+    public Long isRoleGetUserById(UserByIdRequest userByIdRequest) {
+        if(userByIdRequest==null){
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR,"用户id不存在");
+        }
+        Long userId = userByIdRequest.getUserId();
+        List<String> roleList = StpUtil.getRoleList();
+        log.info("当前用户角色为{}",roleList);
+        return userId;
+    }
 }
 
 

@@ -21,8 +21,14 @@ public enum CommonConstant {
     /**
      * 页面降序
      */
-    PAGE_SORT_ORDER_DESC();
-    CommonConstant(){
-    }
+    PAGE_SORT_ORDER_DESC(),
+    /**
+     * 通用字段大小限制
+     */
+    FIELD_MAX;
+
+    private final int fieldMax=8;
+
+
 
 }

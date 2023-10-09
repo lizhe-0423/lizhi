@@ -2,6 +2,7 @@ package com.lizhi.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lizhi.model.dto.user.UserByIdRequest;
 import com.lizhi.model.dto.user.UserSearchRequest;
 import com.lizhi.model.entity.Users;
 
@@ -39,9 +40,15 @@ public interface UsersService extends IService<Users> {
 
     /**
      * 获取查询条件
-     *
      * @param userSearchRequest 用户查询请求
      * @return 实体对象封装操作类
      */
     QueryWrapper<Users> getQueryWrapper(UserSearchRequest userSearchRequest);
+
+    /**
+     * 对需要进行查询、删除的用户id请求数据进行判断
+     * @param userByIdRequest 用户id请求
+     * @return 用户id
+     */
+    Long isRoleGetUserById(UserByIdRequest userByIdRequest);
 }
