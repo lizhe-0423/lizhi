@@ -4,6 +4,7 @@ import com.lizhi.common.BaseResponse;
 import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
 import com.lizhi.common.ResultUtils;
+import com.lizhi.constant.LogConstant;
 import com.lizhi.model.dto.bi.BiApiSignatureRequest;
 import com.lizhi.model.dto.bi.BiApiTranslationRequest;
 import com.lizhi.model.dto.bi.BiCopyRequest;
@@ -31,9 +32,11 @@ public class BiApiController {
     @PostMapping("/getSignature")
     public BaseResponse<BiApi> getSignature(@RequestBody BiApiSignatureRequest biApiSignatureRequest){
         if(!StpUtil.isLogin()){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取getSignature账号未登录");
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         if(biApiSignatureRequest==null){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"未发现请求biApiSignatureRequest");
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return ResultUtils.success(biApiService.getSignature(biApiSignatureRequest));
@@ -41,9 +44,11 @@ public class BiApiController {
     @PostMapping("/getTranslation")
     public BaseResponse<BiApi> getTranslation(@RequestBody BiApiTranslationRequest biApiTranslationRequest){
         if(!StpUtil.isLogin()){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取getTranslation账号未登录");
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         if(biApiTranslationRequest==null){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"未发现请求biApiTranslationRequest");
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return ResultUtils.success(biApiService.getTranslation(biApiTranslationRequest));
@@ -51,9 +56,11 @@ public class BiApiController {
     @PostMapping("/getCopy")
     public BaseResponse<BiApi> getCopy(@RequestBody BiCopyRequest biCopyRequest){
         if(!StpUtil.isLogin()){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取biCopyRequest账号未登录");
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         if(biCopyRequest==null){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"未发现请求biCopyRequest");
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return ResultUtils.success(biApiService.getCopy(biCopyRequest));
