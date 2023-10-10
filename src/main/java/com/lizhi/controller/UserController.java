@@ -16,7 +16,6 @@ import com.lizhi.model.vo.UserLoginResponse;
 import com.lizhi.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 
 /**
@@ -65,14 +64,25 @@ public class UserController {
         Long userRegisterId = usersService.userRegister(userRegisterRequest.getUserAccount(), userRegisterRequest.getUserPassword());
         return   ResultUtils.success(userRegisterId);
     }
+    @GetMapping("/logout")
+    public BaseResponse<String> logoutUser(){
+        if(StpUtil.isLogin()){
+            StpUtil.logout();
+            return ResultUtils.success("已成功注销用户");
+        }
+        return ResultUtils.success("当前用户注销失败");
+    }
 
     /**
      * 分页获取用户信息
      * @param userSearchRequest 用户查询请求
      * @return BaseResponse<Page<Users>>
      */
-    @GetMapping("/page")
+    @PostMapping("/page")
     public BaseResponse<Page<Users>> searchUser(@RequestBody UserSearchRequest userSearchRequest){
+        if(!StpUtil.isLogin()){
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"当前帐号未登录");
+        }
         if(userSearchRequest==null){
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR,"请求数据为空");
         }
@@ -88,8 +98,11 @@ public class UserController {
      * @param userByIdRequest 用户id
      * @return 用户信息
      */
-    @GetMapping("/getUserById")
+    @PostMapping("/getUserById")
     public BaseResponse<Users> getUserById(@RequestBody UserByIdRequest userByIdRequest){
+        if(!StpUtil.isLogin()){
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR,"当前帐号未登录");
+        }
         Long userId=usersService.isRoleGetUserById(userByIdRequest);
         Users userById = usersService.getById(userId);
         return ResultUtils.success(userById);
@@ -116,4 +129,5 @@ public class UserController {
             return ResultUtils.error(ErrorCode.NOT_FOUND_ERROR,"删除用户失败~用户或许不存在");
         }
     }
+
 }

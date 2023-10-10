@@ -29,6 +29,4 @@ public enum CommonConstant {
 
     private final int fieldMax=8;
 
-
-
 }
