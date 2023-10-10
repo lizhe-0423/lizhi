@@ -3,6 +3,7 @@ package com.lizhi.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lizhi.model.dto.bi.BiApiSignatureRequest;
 import com.lizhi.model.dto.bi.BiApiTranslationRequest;
+import com.lizhi.model.dto.bi.BiCopyRequest;
 import com.lizhi.model.entity.BiApi;
 
 /**
@@ -30,4 +31,23 @@ public interface BiApiService extends IService<BiApi> {
      * @param biApi biApi类中参数
      */
     void isParameterCheck(BiApi biApi);
+
+    /**
+     * 得到bi文案
+     * @param biCopyRequest 生成文案请求
+     * @return 文案内容
+     */
+    BiApi getCopy(BiCopyRequest biCopyRequest);
+
+    /**
+     * 封装发送消息
+     * @param id BI id
+     * @param type 类型
+     * @param style 风格
+     * @param message 内容
+     * @param name 消息名称
+     * @param userId 用户id
+     * @return 封装BiApi体
+     */
+    BiApi getBiApi(Long id, String type, String style, String message, String name,Long userId);
 }

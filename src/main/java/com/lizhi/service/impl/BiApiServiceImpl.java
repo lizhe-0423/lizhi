@@ -11,6 +11,7 @@ import com.lizhi.manage.AiManage;
 import com.lizhi.mapper.BiApiMapper;
 import com.lizhi.model.dto.bi.BiApiSignatureRequest;
 import com.lizhi.model.dto.bi.BiApiTranslationRequest;
+import com.lizhi.model.dto.bi.BiCopyRequest;
 import com.lizhi.model.entity.BiApi;
 import com.lizhi.model.entity.Users;
 import com.lizhi.service.BiApiService;
@@ -35,19 +36,11 @@ public class BiApiServiceImpl extends ServiceImpl<BiApiMapper, BiApi>
         String type = biApiSignatureRequest.getType();
         String style = biApiSignatureRequest.getStyle();
         String words = biApiSignatureRequest.getWords();
-        String str="请帮我生成一个个性签名 类型:"+type+"风格:"+style+"字数:"+words;
-        BiApi biApi = new BiApi();
-        biApi.setBiId(IdUtil.simpleUUID());
-        biApi.setUserId(user.getUserId());
-        biApi.setBiName("签名");
-        biApi.setBiType(type);
-        biApi.setBiStyle(style);
-        isParameterCheck(biApi);
-        biApi.setCreateTime(DateTime.now());
-        String doChat = aiManage.doChat(signatureId, str);
-        biApi.setBiContent(doChat);
-        this.save(biApi);
-        return biApi;
+        String message="请帮我生成一个个性签名 类型:"
+                +type+"风格:"
+                +style
+                +"字数:"+words;
+        return getBiApi(signatureId, type, style, message, "签名",user.getUserId());
     }
     @Override
     public BiApi getTranslation(BiApiTranslationRequest biApiTranslationRequest) {
@@ -56,21 +49,43 @@ public class BiApiServiceImpl extends ServiceImpl<BiApiMapper, BiApi>
         String text = biApiTranslationRequest.getText();
         String type = biApiTranslationRequest.getType();
         String style = biApiTranslationRequest.getStyle();
-        String str="请帮我翻译以下内容 类型(决定翻译成什么语言):"+type+"风格:"+style+"内容:"+text;
+        String message="请帮我翻译以下内容(只需要翻译内容:后的内容 不需要翻译其余内容) 类型(决定翻译成什么语言):"
+                +type+"风格:"
+                +style+"内容:"
+                +text;
+        return getBiApi(translationId, type, style, message,"翻译",user.getUserId());
+    }
+    @Override
+    public BiApi getCopy(BiCopyRequest biCopyRequest) {
+        Users user =(Users) StpUtil.getSession().get("user");
+        Long copyId = BiConstant.COPY_ID;
+        String text = biCopyRequest.getText();
+        String type = biCopyRequest.getType();
+        String style = biCopyRequest.getStyle();
+        String message="请帮我生成下述文案 类型:"
+                +type+"风格(搞笑还是正式):"
+                +style+"内容(关于什么):"
+                +text;
         BiApi biApi = new BiApi();
         biApi.setBiId(IdUtil.simpleUUID());
         biApi.setUserId(user.getUserId());
-        biApi.setBiName("翻译");
+        return getBiApi(copyId, type, style, message, "文案",user.getUserId());
+    }
+    @Override
+    public BiApi getBiApi(Long id, String type, String style, String message, String name,Long userId) {
+        BiApi biApi = new BiApi();
+        biApi.setBiName(name);
         biApi.setBiType(type);
         biApi.setBiStyle(style);
         biApi.setCreateTime(DateTime.now());
+        biApi.setBiId(IdUtil.simpleUUID());
+        biApi.setUserId(userId);
         isParameterCheck(biApi);
-        String doChat = aiManage.doChat(translationId, str);
+        String doChat = aiManage.doChat(id, message);
         biApi.setBiContent(doChat);
         this.save(biApi);
         return biApi;
     }
-
     @Override
     public void isParameterCheck(BiApi biApi) {
         if(CharSequenceUtil.isBlank(biApi.getBiType())){
@@ -80,7 +95,6 @@ public class BiApiServiceImpl extends ServiceImpl<BiApiMapper, BiApi>
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
     }
-
 }
 
 
