@@ -54,8 +54,10 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接
         min-idle: 0
+  servlet:
+    multipart:
+      max-file-size: 10MB
 yuapi:
   client:
     access-key: wi2fl4nz538u2my31y72ly9n3o7ef0jx
     secret-key: l2em830u6mag2xn0joznr2dq3bgdn2z1
-

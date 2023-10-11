@@ -29,6 +29,12 @@ import javax.annotation.Resource;
 public class BiApiController {
     @Resource
     BiApiService biApiService;
+
+    /**
+     * 获取签名接口
+     * @param biApiSignatureRequest 签名请求
+     * @return BaseResponse<BiApi>
+     */
     @PostMapping("/getSignature")
     public BaseResponse<BiApi> getSignature(@RequestBody BiApiSignatureRequest biApiSignatureRequest){
         if(!StpUtil.isLogin()){
@@ -41,6 +47,12 @@ public class BiApiController {
         }
         return ResultUtils.success(biApiService.getSignature(biApiSignatureRequest));
     }
+
+    /**
+     * 获取翻译接口
+     * @param biApiTranslationRequest 翻译请求
+     * @return BaseResponse<BiApi>
+     */
     @PostMapping("/getTranslation")
     public BaseResponse<BiApi> getTranslation(@RequestBody BiApiTranslationRequest biApiTranslationRequest){
         if(!StpUtil.isLogin()){
@@ -53,6 +65,12 @@ public class BiApiController {
         }
         return ResultUtils.success(biApiService.getTranslation(biApiTranslationRequest));
     }
+
+    /**
+     * 获取文案接口
+     * @param biCopyRequest 文案请求
+     * @return BaseResponse<BiApi>
+     */
     @PostMapping("/getCopy")
     public BaseResponse<BiApi> getCopy(@RequestBody BiCopyRequest biCopyRequest){
         if(!StpUtil.isLogin()){
@@ -65,5 +83,23 @@ public class BiApiController {
         }
         return ResultUtils.success(biApiService.getCopy(biCopyRequest));
     }
+    /**
+     * 获取图表接口
+     * @param biCopyRequest 文案请求
+     * @return BaseResponse<BiApi>
+     */
+    @PostMapping("/getCopy")
+    public BaseResponse<BiApi> getCopy(@RequestBody BiCopyRequest biCopyRequest){
+        if(!StpUtil.isLogin()){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取biCopyRequest账号未登录");
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+        if(biCopyRequest==null){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"未发现请求biCopyRequest");
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        return ResultUtils.success(biApiService.getCopy(biCopyRequest));
+    }
+
 
 }

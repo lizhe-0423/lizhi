@@ -17,5 +17,6 @@ public enum BiConstant {
     public static final Long SIGNATURE_ID=1711317875597643777L;
     public static final Long TRANSLATION_ID=1711317340941324290L;
     public static final Long COPY_ID=1711655380977061889L;
+    public static final Long CHART_ID = 1659171950288818178L;
 
 }
