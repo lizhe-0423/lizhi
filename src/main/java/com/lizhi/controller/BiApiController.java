@@ -83,23 +83,5 @@ public class BiApiController {
         }
         return ResultUtils.success(biApiService.getCopy(biCopyRequest));
     }
-    /**
-     * 获取图表接口
-     * @param biCopyRequest 文案请求
-     * @return BaseResponse<BiApi>
-     */
-    @PostMapping("/getCopy")
-    public BaseResponse<BiApi> getCopy(@RequestBody BiCopyRequest biCopyRequest){
-        if(!StpUtil.isLogin()){
-            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取biCopyRequest账号未登录");
-            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
-        }
-        if(biCopyRequest==null){
-            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"未发现请求biCopyRequest");
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        return ResultUtils.success(biApiService.getCopy(biCopyRequest));
-    }
-
 
 }

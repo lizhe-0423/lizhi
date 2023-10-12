@@ -1,5 +1,6 @@
 package com.lizhi.service;
 
+import com.lizhi.model.dto.chart.ChartAddRequest;
 import com.lizhi.model.entity.BiChart;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,13 +13,17 @@ import org.springframework.web.multipart.MultipartFile;
 public interface BiChartService extends IService<BiChart> {
     /**
      * 保存图表接口
-     * @param chart 图表
+     * @param chartAddRequest 图表新增请求
+     * @param multipartFile 文件
      * @return BiChart
      */
-    BiChart saveChart(BiChart chart, MultipartFile multipartFile);
+    BiChart saveChart(ChartAddRequest chartAddRequest, MultipartFile multipartFile);
 
     /**
-     * 封装要chart发送的内容
+     * 封装要发送的chart内容
+     * @param userGoal 分析目标
+     * @param chartType 分析类型
+     * @param excelToCsv excel文件
      * @return String
      */
     String getChartMessage(String userGoal,String chartType,String excelToCsv);
@@ -30,4 +35,11 @@ public interface BiChartService extends IService<BiChart> {
      * @return BiChart
      */
     BiChart receiveChartMessage(String doChart,BiChart biChart);
+
+    /**
+     * 更新图表失败
+     * @param chart 传入的图表类
+     * @param execMessage 传入的执行信息
+     */
+    void handleChartUpdateError(BiChart chart,String execMessage);
 }
