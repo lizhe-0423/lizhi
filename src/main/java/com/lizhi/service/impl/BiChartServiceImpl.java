@@ -1,5 +1,4 @@
 package com.lizhi.service.impl;
-
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,10 +15,9 @@ import com.lizhi.utils.ThrowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
-
+import java.util.concurrent.ThreadPoolExecutor;
 /**
 * @author <a href="https://github.com/lizhe-0423">lizhi</a>
 * @description 针对表【bi_chart(BI图表表)】的数据库操作Service实现
@@ -33,6 +31,9 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
     @Resource
     AiManage aiManage;
 
+    @Resource
+    ThreadPoolExecutor threadPoolExecutor;
+
     @Override
     public BiChart saveChart(ChartAddRequest chartAddRequest, MultipartFile multipartFile) {
         ThrowUtil.throwIf(CharSequenceUtil.isBlank(chartAddRequest.getChartGoal()),ErrorCode.NOT_FOUND_ERROR);
@@ -45,6 +46,7 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
         chart.setChartText(excelToCsv);
         chart.setChartStatus("waiting");
         this.save(chart);
+
         CompletableFuture.runAsync(()->{
             chart.setChartStatus("running");
             boolean b = this.updateById(chart);
@@ -53,11 +55,11 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
                 return;
             }
             String doChat = aiManage.doChat(BiConstant.CHART_ID, message);
+            ThrowUtil.throwIf(doChat==null,ErrorCode.NOT_FOUND_ERROR);
             BiChart receivedChartMessage = receiveChartMessage(doChat, chart);
             this.updateById(receivedChartMessage);
-
-        });
-        return null;
+        },threadPoolExecutor);
+        return chart;
     }
 
     @Override
@@ -76,11 +78,10 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
         String genChart = splits[1];
         String genResult = splits[2];
         // 将状态改为成功
-        BiChart updateChartAfter = new BiChart();
-        updateChartAfter.setChartStatus("succeed");
-        updateChartAfter.setChartGen(genChart);
-        updateChartAfter.setChartResult(genResult);
-        return updateChartAfter;
+        biChart.setChartStatus("succeed");
+        biChart.setChartGen(genChart);
+        biChart.setChartResult(genResult);
+        return biChart;
     }
 
     @Override

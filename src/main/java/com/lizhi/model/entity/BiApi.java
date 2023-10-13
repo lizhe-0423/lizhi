@@ -41,6 +41,11 @@ public class BiApi implements Serializable {
     private String biStyle;
 
     /**
+     * 状态
+     */
+    private String biStatus;
+
+    /**
      * 内容
      */
     private String biContent;
