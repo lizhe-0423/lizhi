@@ -1,4 +1,5 @@
 package com.lizhi.controller;
+
 import cn.dev33.satoken.stp.StpUtil;
 import com.lizhi.common.BaseResponse;
 import com.lizhi.common.BusinessException;
@@ -11,10 +12,12 @@ import com.lizhi.model.dto.bi.BiCopyRequest;
 import com.lizhi.model.entity.BiApi;
 import com.lizhi.service.BiApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.annotation.Resource;
 
 /**
@@ -26,6 +29,7 @@ import javax.annotation.Resource;
 @RestController
 @Slf4j
 @RequestMapping("/biApi")
+@EnableAsync
 public class BiApiController {
     @Resource
     BiApiService biApiService;
@@ -83,5 +87,4 @@ public class BiApiController {
         }
         return ResultUtils.success(biApiService.getCopy(biCopyRequest));
     }
-
 }

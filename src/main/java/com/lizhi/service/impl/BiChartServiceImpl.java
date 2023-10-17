@@ -1,4 +1,5 @@
 package com.lizhi.service.impl;
+
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.text.CharSequenceUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,12 +10,14 @@ import com.lizhi.manage.AiManage;
 import com.lizhi.mapper.BiChartMapper;
 import com.lizhi.model.dto.chart.ChartAddRequest;
 import com.lizhi.model.entity.BiChart;
+import com.lizhi.mq.BiMessageProducer;
 import com.lizhi.service.BiChartService;
 import com.lizhi.utils.ExcelUtils;
 import com.lizhi.utils.ThrowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -33,6 +36,9 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
 
     @Resource
     ThreadPoolExecutor threadPoolExecutor;
+
+    @Resource
+    BiMessageProducer biMessageProducer;
 
     @Override
     public BiChart saveChart(ChartAddRequest chartAddRequest, MultipartFile multipartFile) {
@@ -63,7 +69,7 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
     }
 
     @Override
-    public String getChartMessage(String userGoal, String chartType,String excelToCsv) {
+    public String getChartMessage(String userGoal, String chartType, String excelToCsv) {
         return "分析需求:"+"\n"+userGoal+"请使用"+chartType+"\n"+"原始数据"+"\n"+excelToCsv;
     }
 
@@ -93,6 +99,21 @@ public class BiChartServiceImpl extends ServiceImpl<BiChartMapper, BiChart>
         if(!b2){
             log.error("更新图表失败状态失败{}{}",chart,execMessage);
         }
+    }
+
+    @Override
+    public BiChart saveChartByMq(ChartAddRequest chartAddRequest, MultipartFile multipartFile) {
+        ThrowUtil.throwIf(CharSequenceUtil.isBlank(chartAddRequest.getChartGoal()),ErrorCode.NOT_FOUND_ERROR);
+        ThrowUtil.throwIf(CharSequenceUtil.isBlank(chartAddRequest.getChartType()),ErrorCode.NOT_FOUND_ERROR);
+        ThrowUtil.throwIf(CharSequenceUtil.isBlank(chartAddRequest.getChartName()),ErrorCode.NOT_FOUND_ERROR);
+        String excelToCsv = ExcelUtils.excelToCsv(multipartFile);
+        BiChart chart = new BiChart();
+        BeanUtil.copyProperties(chartAddRequest,chart);
+        chart.setChartText(excelToCsv);
+        chart.setChartStatus("waiting");
+        this.save(chart);
+        biMessageProducer.sendMessage(chart.getChartId().toString());
+        return chart;
     }
 }
 

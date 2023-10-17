@@ -1,4 +1,6 @@
 package com.lizhi.controller;
+
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.lizhi.common.BaseResponse;
 import com.lizhi.common.BusinessException;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
+
 /**
  * @author <a href="https://github.com/lizhe-0423">荔枝程序员</a>
  *
@@ -36,12 +40,41 @@ public class BiChartController {
      */
     @PostMapping("/gen")
     public BaseResponse<BiChartResponse> genChart(@RequestPart("file") MultipartFile multipartFile,ChartAddRequest chartAddRequest){
+        validLogin(chartAddRequest);
+        BiChartResponse biChartResponse = new BiChartResponse();
+        BeanUtil.copyProperties(biChartService.saveChart(chartAddRequest,multipartFile),biChartResponse);
+        return ResultUtils.success(biChartResponse);
+    }
+
+    /**
+     * 通过MQ生成图表接口功能
+     * @param multipartFile 要处理的文件
+     * @param chartAddRequest 图标请求
+     * @return BaseResponse<BiChartResponse>
+     */
+    @PostMapping("/genMQ")
+    public BaseResponse<BiChartResponse> genChartByMq(@RequestPart("file") MultipartFile multipartFile,ChartAddRequest chartAddRequest){
+        /*
+         这是通过MQ实现图表生成功能
+         */
+        validLogin(chartAddRequest);
+        BiChartResponse biChartResponse = new BiChartResponse();
+        BeanUtil.copyProperties(biChartService.saveChartByMq(chartAddRequest,multipartFile),biChartResponse);
+        return ResultUtils.success(biChartResponse);
+    }
+
+    /**
+     * 检验用户是否登录是否具有获取参数权限
+     * @param chartAddRequest http请求
+     */
+    public void validLogin(ChartAddRequest chartAddRequest){
+        if(!StpUtil.isLogin()){
+            log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取chartAddRequest账号未登录");
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
         if(chartAddRequest==null){
             log.error(LogConstant.LOGERROR, ErrorCode.NOT_FOUND_ERROR,"未发现请求chartAddRequest");
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-        BiChartResponse biChartResponse = new BiChartResponse();
-        BeanUtil.copyProperties(biChartService.saveChart(chartAddRequest,multipartFile),biChartResponse);
-        return ResultUtils.success(biChartResponse);
     }
 }

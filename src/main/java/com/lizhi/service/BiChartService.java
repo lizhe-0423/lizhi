@@ -42,4 +42,12 @@ public interface BiChartService extends IService<BiChart> {
      * @param execMessage 传入的执行信息
      */
     void handleChartUpdateError(BiChart chart,String execMessage);
+
+    /**
+     * 通过MQ保存图表接口
+     * @param chartAddRequest 图标请求
+     * @param multipartFile 文件
+     * @return BiChart
+     */
+    BiChart saveChartByMq(ChartAddRequest chartAddRequest, MultipartFile multipartFile);
 }
