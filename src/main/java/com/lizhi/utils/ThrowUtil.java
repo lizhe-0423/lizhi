@@ -10,6 +10,9 @@ import com.lizhi.common.ErrorCode;
  * @data 2023 2023/10/11 17:20
  */
 public class ThrowUtil {
+    private ThrowUtil() {
+        throw new IllegalStateException("ThrowUtil class");
+    }
     /**
      * 如果condition 为true 就抛出异常
      * @param condition 条件

@@ -1,5 +1,4 @@
 package com.lizhi.controller;
-
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.lizhi.common.BaseResponse;
@@ -7,9 +6,12 @@ import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
 import com.lizhi.common.ResultUtils;
 import com.lizhi.constant.LogConstant;
+import com.lizhi.constant.UserConstant;
+import com.lizhi.manage.RedisLimitManager;
 import com.lizhi.model.dto.chart.ChartAddRequest;
 import com.lizhi.model.vo.BiChartResponse;
 import com.lizhi.service.BiChartService;
+import com.lizhi.utils.ThrowUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,8 @@ import javax.annotation.Resource;
 public class BiChartController {
     @Resource
     BiChartService biChartService;
+    @Resource
+    RedisLimitManager redisLimitManager;
 
     /**
      * 生成图表功能接口
@@ -42,8 +46,16 @@ public class BiChartController {
     public BaseResponse<BiChartResponse> genChart(@RequestPart("file") MultipartFile multipartFile,ChartAddRequest chartAddRequest){
         validLogin(chartAddRequest);
         BiChartResponse biChartResponse = new BiChartResponse();
-        BeanUtil.copyProperties(biChartService.saveChart(chartAddRequest,multipartFile),biChartResponse);
-        return ResultUtils.success(biChartResponse);
+        if(UserConstant.USER.toString().equals(validLogin(chartAddRequest))){
+            redisLimitManager.doRateLimitByUser("XL:USER:"+StpUtil.getSession().get("user"));
+            BeanUtil.copyProperties(biChartService.saveChart(chartAddRequest,multipartFile),biChartResponse);
+            return ResultUtils.success(biChartResponse);
+        }else if(UserConstant.VIP.toString().equals(validLogin(chartAddRequest))){
+            redisLimitManager.doRateLimitByVip("XL:VIP:"+StpUtil.getSession().get("user"));
+            BeanUtil.copyProperties(biChartService.saveChart(chartAddRequest,multipartFile),biChartResponse);
+            return ResultUtils.success(biChartResponse);
+        }
+       return ResultUtils.success(biChartResponse);
     }
 
     /**
@@ -57,24 +69,40 @@ public class BiChartController {
         /*
          这是通过MQ实现图表生成功能
          */
-        validLogin(chartAddRequest);
         BiChartResponse biChartResponse = new BiChartResponse();
-        BeanUtil.copyProperties(biChartService.saveChartByMq(chartAddRequest,multipartFile),biChartResponse);
+        if(UserConstant.USER.toString().equals(validLogin(chartAddRequest))){
+            redisLimitManager.doRateLimitByUser("XL:USER:"+StpUtil.getSession().get("user"));
+            BeanUtil.copyProperties(biChartService.saveChartByMq(chartAddRequest,multipartFile),biChartResponse);
+            return ResultUtils.success(biChartResponse);
+        }else if(UserConstant.VIP.toString().equals(validLogin(chartAddRequest))){
+            redisLimitManager.doRateLimitByVip("XL:VIP:"+StpUtil.getSession().get("user"));
+            BeanUtil.copyProperties(biChartService.saveChartByMq(chartAddRequest,multipartFile),biChartResponse);
+            return ResultUtils.success(biChartResponse);
+        }
         return ResultUtils.success(biChartResponse);
     }
 
     /**
      * 检验用户是否登录是否具有获取参数权限
      * @param chartAddRequest http请求
+     * @return 用户当前等级
      */
-    public void validLogin(ChartAddRequest chartAddRequest){
-        if(!StpUtil.isLogin()){
+    public String validLogin(ChartAddRequest chartAddRequest){
+        if (!StpUtil.isLogin()) {
             log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"获取chartAddRequest账号未登录");
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
-        if(chartAddRequest==null){
+        if (chartAddRequest == null) {
             log.error(LogConstant.LOGERROR, ErrorCode.NOT_FOUND_ERROR,"未发现请求chartAddRequest");
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
+        ThrowUtil.throwIf(!StpUtil.hasRoleOr("USER","ADMIN"),ErrorCode.NO_AUTH_ERROR);
+        if (StpUtil.hasRole(UserConstant.VIP.toString())) {
+            return UserConstant.VIP.toString();
+        }else if (StpUtil.hasRole(UserConstant.USER.toString())) {
+            return UserConstant.USER.toString();
+        }
+        log.debug("当前用户或许已被封禁");
+        return "BAN";
     }
 }
