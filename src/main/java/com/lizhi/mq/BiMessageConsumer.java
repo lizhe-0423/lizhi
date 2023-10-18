@@ -1,5 +1,4 @@
 package com.lizhi.mq;
-
 import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
 import com.lizhi.manage.AiManage;
@@ -12,11 +11,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-
 import javax.annotation.Resource;
 import java.io.IOException;
-
-
 /**
  * @author <a href="https://github.com/lizhe-0423">lizhi</a>
  */
@@ -66,9 +62,6 @@ public class BiMessageConsumer {
             channel.basicNack(deliveryTag,false,false);
             chartService.handleChartUpdateError(updateChartAfter, "更新图表成功状态失败");
         }
-
-
-
         log.info("receiveMessage message={}",message);
         //手动执行ack 消息确认
         channel.basicAck(deliveryTag,false);

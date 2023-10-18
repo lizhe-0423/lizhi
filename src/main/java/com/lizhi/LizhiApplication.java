@@ -13,4 +13,5 @@ public class LizhiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LizhiApplication.class, args);
 	}
+	
 }

@@ -42,7 +42,7 @@ spring:
     # Redis服务器连接密码（默认为空）
     password: lizhe@0110266577
     # 连接超时时间
-    timeout: 10s
+    timeout: 15s
     lettuce:
       pool:
         # 连接池最大连接数
@@ -53,6 +53,19 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接
         min-idle: 0
+  rabbitmq:
+    host: 123.249.123.29
+    port: 5672
+    password: lizhe@0110266577
+    username: lizhi
+    listener:
+      direct:
+        retry:
+          enabled: true
+          max-attempts: 5
+          initial-interval: 5000ms
+          max-interval: 1200000ms
+          multiplier: 2
   servlet:
     multipart:
       max-file-size: 10MB
