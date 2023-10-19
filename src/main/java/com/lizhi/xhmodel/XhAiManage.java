@@ -58,7 +58,7 @@ public class XhAiManage {
      * @param apiSecret apiSecret
      * @return url
      */
-    public static String getAuthUrl(String hostUrl, String apiKey, String apiSecret) throws MalformedURLException, NoSuchAlgorithmException, InvalidKeyException {
+    public  String getAuthUrl(String hostUrl, String apiKey, String apiSecret) throws MalformedURLException, NoSuchAlgorithmException, InvalidKeyException {
         URL url = new URL(hostUrl);
         // 时间
         SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
