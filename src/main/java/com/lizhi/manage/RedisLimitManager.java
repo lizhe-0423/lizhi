@@ -10,14 +10,13 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * 专门提供Redis Limit 提供基础服务的
+ * 专门提供Redis Limit 提供限流服务的
  * @author <a href="https://github.com/lizhe-0423">荔枝程序员</a>
  */
 @Service
 public class RedisLimitManager {
     @Resource
     private RedissonClient redissonClient;
-
     /**
      * 限流操作 普通用户每秒钟2次
      * @param key 区分不同的限流器
