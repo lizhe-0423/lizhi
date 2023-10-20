@@ -4,7 +4,8 @@
 
 ## 问题定位
 
-controller 层下 UserController url:/user/page 异常
+- config 包下 RedissonConfig 异常
+- manage 包下 RedisLimitManager 限流器 依赖于 上述RedissonConfig类
 
 ## 问题修复
 
