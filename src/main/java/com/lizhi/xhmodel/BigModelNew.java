@@ -20,10 +20,12 @@ import java.util.*;
 public class BigModelNew extends WebSocketListener {
     // 地址与鉴权信息  https://spark-api.xf-yun.com/v1.1/chat   1.5地址  domain参数为general
     // 地址与鉴权信息  https://spark-api.xf-yun.com/v2.1/chat   2.0地址  domain参数为generalv2
+
+    //todo: 输入xh 配置
     public static final String hostUrl = "https://spark-api.xf-yun.com/v2.1/chat";
-    public static final String appid = "cdae0af6";
-    public static final String apiSecret = "ZGQzMDU1NWJkNTUxOGI3NjNmZmFkOTRk";
-    public static final String apiKey = "bc2bab52cc86f8286258c34cd59889b6";
+    public static final String appid = "";
+    public static final String apiSecret = "";
+    public static final String apiKey = "";
 
     public static List<RoleContent> historyList=new ArrayList<>(); // 对话历史存储集合
 

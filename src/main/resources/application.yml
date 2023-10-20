@@ -25,29 +25,30 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  #数据库配置
+  #数据库配置 todo
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/lizhi
+    url: jdbc:mysql://127.0.0.1:3306/
     username:
-    password: lizhe@0110266577
-  # redis配置
+    password:
+  # redis配置 todo
   redis:
     # Redis数据库索引（默认为0）
     database: 2
     # Redis服务器地址
-    host: 123.249.123.29
+    host:
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password: lizhe@0110266577
+    password:
     # 连接超时时间
     timeout: 5000
+#    rabbit mq 配置 todo
   rabbitmq:
-    host: 123.249.123.29
+    host:
     port: 5672
-    password: lizhe@0110266577
-    username: lizhi
+    password:
+    username:
     listener:
       direct:
         retry:
@@ -59,7 +60,8 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+# todo 鱼聪明 sdk
 yuapi:
   client:
-    access-key: wi2fl4nz538u2my31y72ly9n3o7ef0jx
-    secret-key: l2em830u6mag2xn0joznr2dq3bgdn2z1
+    access-key:
+    secret-key:

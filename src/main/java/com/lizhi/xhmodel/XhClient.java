@@ -21,13 +21,13 @@ public class XhClient {
     /**
      * appid
      */
-    public static final String APPID = "cdae0af6";
+    public static final String APPID = "";
     /**
      * apiSecret
      */
-    public static final String API_SECRET = "ZGQzMDU1NWJkNTUxOGI3NjNmZmFkOTRk";
+    public static final String API_SECRET = "";
     /**
      * apiKey
      */
-    public static final String API_KEY = "bc2bab52cc86f8286258c34cd59889b6";
+    public static final String API_KEY = "";
 }
