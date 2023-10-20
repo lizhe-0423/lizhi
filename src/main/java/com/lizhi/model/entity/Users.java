@@ -19,10 +19,10 @@ import java.util.Date;
 @Data
 public class Users implements Serializable {
     /**
-     * 
+     * 主键id
      */
     @TableId(type = IdType.AUTO)
-    private Long userId;
+    private Long id;
 
     /**
      * 用户名

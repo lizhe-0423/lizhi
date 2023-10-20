@@ -40,7 +40,7 @@ public class BiApiServiceImpl extends ServiceImpl<BiApiMapper, BiApi>
                 +type+"风格:"
                 +style
                 +"字数:"+words;
-        return getBiApi(signatureId, type, style, message, "签名",user.getUserId());
+        return getBiApi(signatureId, type, style, message, "签名",user.getId());
     }
     @Override
     public BiApi getTranslation(BiApiTranslationRequest biApiTranslationRequest) {
@@ -53,7 +53,7 @@ public class BiApiServiceImpl extends ServiceImpl<BiApiMapper, BiApi>
                 +type+"风格:"
                 +style+"内容:"
                 +text;
-        return getBiApi(translationId, type, style, message,"翻译",user.getUserId());
+        return getBiApi(translationId, type, style, message,"翻译",user.getId());
     }
     @Override
     public BiApi getCopy(BiCopyRequest biCopyRequest) {
@@ -68,8 +68,8 @@ public class BiApiServiceImpl extends ServiceImpl<BiApiMapper, BiApi>
                 +text;
         BiApi biApi = new BiApi();
         biApi.setBiId(IdUtil.simpleUUID());
-        biApi.setUserId(user.getUserId());
-        return getBiApi(copyId, type, style, message, "文案",user.getUserId());
+        biApi.setUserId(user.getId());
+        return getBiApi(copyId, type, style, message, "文案",user.getId());
     }
     @Override
     public BiApi getBiApi(Long id, String type, String style, String message, String name,Long userId) {

@@ -29,7 +29,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/lizhi
-    username:
+    username: root
     password: lizhe@0110266577
   # redis配置
   redis:

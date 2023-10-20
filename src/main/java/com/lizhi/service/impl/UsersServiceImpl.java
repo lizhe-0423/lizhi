@@ -47,7 +47,7 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         }
         Users user = createUser(userAccount, userPassword);
         this.save(user);
-        return user.getUserId();
+        return user.getId();
     }
     @Override
     public Users createUser(String userAccount, String userPassword) {

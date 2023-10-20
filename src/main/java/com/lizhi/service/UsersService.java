@@ -31,7 +31,7 @@ public interface UsersService extends IService<Users> {
     Users createUser(String userAccount, String userPassword);
 
     /**
-     * 得到当前登录用户
+     * 登录当前用户
      * @param userAccount 用户账号
      * @param userPassword 用户密码
      * @return 当前登录用户id

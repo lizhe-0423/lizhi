@@ -43,7 +43,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         Users loginUserInfo = usersService.getLoginUser(userLoginRequest.getUserAccount(), userLoginRequest.getUserPassword());
-        StpUtil.login(loginUserInfo);
+        StpUtil.login(loginUserInfo.getId());
         StpUtil.getSession().set("user",loginUserInfo);
         UserLoginResponse loginResponse = new UserLoginResponse();
         BeanUtil.copyProperties(loginUserInfo,loginResponse);

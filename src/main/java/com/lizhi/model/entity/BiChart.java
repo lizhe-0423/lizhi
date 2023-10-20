@@ -23,6 +23,11 @@ public class BiChart implements Serializable {
     private Long chartId;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 目标
      */
     private String chartGoal;
