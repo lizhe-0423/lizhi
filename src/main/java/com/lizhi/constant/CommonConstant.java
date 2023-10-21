@@ -28,5 +28,8 @@ public enum CommonConstant {
     FIELD_MAX;
 
     private final int fieldMax=8;
-
+    /**
+     * 最小长度
+     */
+    private final int fieldMine=1;
 }

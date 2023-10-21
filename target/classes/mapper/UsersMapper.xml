@@ -9,8 +9,10 @@
             <result property="userName" column="user_name" jdbcType="VARCHAR"/>
             <result property="userAccount" column="user_account" jdbcType="VARCHAR"/>
             <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+            <result property="accessKey" column="access_key" jdbcType="VARCHAR"/>
+            <result property="secretKey" column="secret_key" jdbcType="VARCHAR"/>
             <result property="userPhoto" column="user_photo" jdbcType="VARCHAR"/>
-            <result property="userLevel" column="user_level" jdbcType="OTHER"/>
+            <result property="userLevel" column="user_level" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
             <result property="deleteTime" column="delete_time" jdbcType="TIMESTAMP"/>
@@ -18,9 +20,9 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id,user_name,user_account,
-        user_password,user_photo,user_level,
-        create_time,update_time,delete_time,
-        is_delete
+        id,user_name,user_account,
+        user_password,access_key,secret_key,
+        user_photo,user_level,create_time,
+        update_time,delete_time,is_delete
     </sql>
 </mapper>

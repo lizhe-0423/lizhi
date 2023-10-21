@@ -10,6 +10,7 @@ import com.lizhi.model.dto.bi.BiApiSignatureRequest;
 import com.lizhi.model.dto.bi.BiApiTranslationRequest;
 import com.lizhi.model.dto.bi.BiCopyRequest;
 import com.lizhi.model.entity.BiApi;
+import com.lizhi.model.entity.Users;
 import com.lizhi.service.BiApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -49,6 +50,9 @@ public class BiApiController {
             log.error(LogConstant.LOGERROR,ErrorCode.NOT_FOUND_ERROR,"未发现请求biApiSignatureRequest");
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
+        Users loginUser = (Users) StpUtil.getSession().get("user");
+        // loginUser.ak、sk
+        // todo 需要专门写一个 sdk 发送请求到 gateway 进行统一的健全的判断
         return ResultUtils.success(biApiService.getSignature(biApiSignatureRequest));
     }
 

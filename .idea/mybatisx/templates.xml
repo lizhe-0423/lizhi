@@ -68,8 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="BiChart" />
-                  <option name="tableName" value="bi_chart" />
+                  <option name="className" value="Users" />
+                  <option name="tableName" value="users" />
                 </TableUIInfo>
               </list>
             </option>

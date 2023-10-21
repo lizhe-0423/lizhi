@@ -35,6 +35,16 @@ public class Users implements Serializable {
     private String userAccount;
 
     /**
+     * accessKey
+     */
+    private String accessKey;
+
+    /**
+     * secretKey
+     */
+    private String secretKey;
+
+    /**
      * 用户密码
      */
     private String userPassword;

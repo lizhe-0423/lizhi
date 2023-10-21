@@ -2,12 +2,11 @@ package com.lizhi.manage;
 
 import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
-import com.yupi.yucongming.dev.client.YuCongMingClient;
-import com.yupi.yucongming.dev.common.BaseResponse;
-import com.yupi.yucongming.dev.model.DevChatRequest;
-import com.yupi.yucongming.dev.model.DevChatResponse;
+import com.lizhisdk.client.LizhiClient;
+import com.lizhisdk.common.BaseResponse;
+import com.lizhisdk.model.DevChatRequest;
+import com.lizhisdk.model.DevChatResponse;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
 
 /**
@@ -17,7 +16,7 @@ import javax.annotation.Resource;
 @Service
 public class AiManage {
     @Resource
-    private YuCongMingClient yuCongMingClient;
+    private LizhiClient yuCongMingClient;
 
     /**
      * AI 对话
