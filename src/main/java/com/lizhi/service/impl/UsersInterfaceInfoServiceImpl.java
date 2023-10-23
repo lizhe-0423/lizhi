@@ -1,9 +1,9 @@
 package com.lizhi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lizhi.model.entity.UsersInterfaceInfo;
 import com.lizhi.service.UsersInterfaceInfoService;
 import com.lizhi.mapper.UsersInterfaceInfoMapper;
+import com.lizhicommen.entity.UsersInterfaceInfo;
 import org.springframework.stereotype.Service;
 
 /**

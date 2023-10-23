@@ -1,7 +1,7 @@
 package com.lizhi.service;
 
-import com.lizhi.model.entity.UsersInterfaceInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lizhicommen.entity.UsersInterfaceInfo;
 
 /**
 * @author liang

@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
 import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
-import com.lizhi.model.entity.Users;
+import com.lizhicommen.entity.Users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

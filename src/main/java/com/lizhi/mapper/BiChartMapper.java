@@ -1,7 +1,8 @@
 package com.lizhi.mapper;
 
-import com.lizhi.model.entity.BiChart;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lizhicommen.entity.BiChart;
 
 /**
 * @author <a href="https://github.com/lizhe-0423">lizhi</a>

@@ -17,9 +17,9 @@ import com.lizhi.constant.UserConstant;
 import com.lizhi.mapper.UsersMapper;
 import com.lizhi.model.dto.user.UserByIdRequest;
 import com.lizhi.model.dto.user.UserSearchRequest;
-import com.lizhi.model.entity.Users;
 import com.lizhi.service.UsersService;
 import com.lizhi.utils.SqlUtils;
+import com.lizhicommen.entity.Users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.lizhi.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lizhi.model.entity.Users;
+import com.lizhicommen.entity.Users;
 
 
 /**

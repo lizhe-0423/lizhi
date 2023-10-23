@@ -1,7 +1,8 @@
 package com.lizhi.mapper;
 
-import com.lizhi.model.entity.BiApi;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lizhicommen.entity.BiApi;
 
 /**
 * @author <a href="https://github.com/lizhe-0423">lizhi</a>

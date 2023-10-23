@@ -1,7 +1,8 @@
 package com.lizhi.mapper;
 
-import com.lizhi.model.entity.InterfaceInfo;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lizhicommen.entity.InterfaceInfo;
 
 /**
 * @author liang

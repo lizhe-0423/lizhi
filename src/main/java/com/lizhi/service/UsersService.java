@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lizhi.model.dto.user.UserByIdRequest;
 import com.lizhi.model.dto.user.UserSearchRequest;
-import com.lizhi.model.entity.Users;
+import com.lizhicommen.entity.Users;
 
 
 /**

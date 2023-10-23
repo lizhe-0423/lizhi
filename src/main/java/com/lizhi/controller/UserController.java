@@ -12,12 +12,11 @@ import com.lizhi.model.dto.user.UserByIdRequest;
 import com.lizhi.model.dto.user.UserLoginRequest;
 import com.lizhi.model.dto.user.UserRegisterRequest;
 import com.lizhi.model.dto.user.UserSearchRequest;
-import com.lizhi.model.entity.Users;
 import com.lizhi.model.vo.UserLoginResponse;
 import com.lizhi.service.UsersService;
+import com.lizhicommen.entity.Users;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 
 /**

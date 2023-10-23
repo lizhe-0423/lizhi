@@ -1,8 +1,8 @@
 package com.lizhi.service;
 
 import com.lizhi.model.dto.chart.ChartAddRequest;
-import com.lizhi.model.entity.BiChart;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.lizhicommen.entity.BiChart;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

@@ -1,9 +1,11 @@
 package com.lizhi.mq;
+import cn.dev33.satoken.stp.StpUtil;
 import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
 import com.lizhi.manage.AiManage;
-import com.lizhi.model.entity.BiChart;
 import com.lizhi.service.BiChartService;
+import com.lizhicommen.entity.BiChart;
+import com.lizhicommen.entity.Users;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -53,8 +55,12 @@ public class BiMessageConsumer {
             chartService.handleChartUpdateError(updateChartBefore, "更新图表执行状态失败");
             return;
         }
+        // 获取登录用户的 ak、sk
+        Users loginUser = (Users) StpUtil.getSession().get("user");
+        String userAccessKey = loginUser.getAccessKey();
+        String userSecretKey = loginUser.getSecretKey();
         //调用AI
-        String result = aiManage.doChat(MqConstant.BI_MODEL_ID, chartService.getChartMessage(chart.getChartGoal(),chart.getChartType(),chart.getChartText()));
+        String result = aiManage.doChat(MqConstant.BI_MODEL_ID, chartService.getChartMessage(chart.getChartGoal(),chart.getChartType(),chart.getChartText()), userAccessKey, userSecretKey);
         //将Ai的结果进行分割、更新处理
         BiChart updateChartAfter = chartService.receiveChartMessage(result, chart);
         boolean b2 = chartService.updateById(updateChartAfter);
