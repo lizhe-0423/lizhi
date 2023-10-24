@@ -2,6 +2,7 @@ package com.lizhi.controller;
 
 import com.lizhi.common.BaseResponse;
 import com.lizhi.common.ResultUtils;
+import com.lizhi.model.entity.AiMessage;
 import com.lizhi.xhmodel.BigModelNew;
 import com.lizhi.xhmodel.XhAiManage;
 import lombok.extern.slf4j.Slf4j;
@@ -34,13 +35,7 @@ public class XhChat {
      * @return 响应
      */
     @PostMapping("/chat")
-    public BaseResponse<String> getChat(@RequestParam String message) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
-        String sendMessage = xhAiManage.sendMessage(message);
-        return ResultUtils.success(sendMessage);
-    }
-    @PostMapping("/chatByWebSocket")
-    public BaseResponse<String> getChatByWebSocket(@RequestParam String message) throws Exception {
-        BigModelNew bigModelNew = new BigModelNew("1", false);
-        return ResultUtils.success(bigModelNew.getWebSocket(message));
+    public BaseResponse<AiMessage> getChat(@RequestParam String message) throws Exception {
+        return ResultUtils.success(xhAiManage.sendMessage(message));
     }
 }

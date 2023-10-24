@@ -68,8 +68,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="LeaveMessage" />
-                  <option name="tableName" value="leave_message" />
+                  <option name="className" value="AiMessage" />
+                  <option name="tableName" value="ai_message" />
                 </TableUIInfo>
               </list>
             </option>

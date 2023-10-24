@@ -4,8 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
+import com.lizhi.mapper.AiMessageMapper;
+import com.lizhi.model.entity.AiMessage;
+import com.lizhi.service.AiMessageService;
 import okhttp3.*;
 
+import javax.annotation.Resource;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
@@ -14,10 +18,11 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * @author <a href="https://github.com/lizhe-0423">lizhi</a>
- */
 public class BigModelNew extends WebSocketListener {
+
+    AiMessage aiMessage = new AiMessage();
+    @Resource
+    AiMessageService aiMessageService;
     // 地址与鉴权信息  https://spark-api.xf-yun.com/v1.1/chat   1.5地址  domain参数为general
     // 地址与鉴权信息  https://spark-api.xf-yun.com/v2.1/chat   2.0地址  domain参数为generalv2
     public static final String hostUrl = "https://spark-api.xf-yun.com/v2.1/chat";
@@ -45,29 +50,31 @@ public class BigModelNew extends WebSocketListener {
         this.wsCloseFlag = wsCloseFlag;
     }
 
+
+
     // 主函数
-    public  String  getWebSocket(String message) throws Exception {
+    public void bigModelMain(String message) throws Exception {
         // 个性化参数入口，如果是并发使用，可以在这里模拟
-      while (true){
-          if(totalFlag){
-              totalFlag=false;
-              NewQuestion=message;
-              // 构建鉴权url
-              String authUrl = getAuthUrl(hostUrl, apiKey, apiSecret);
-              OkHttpClient client = new OkHttpClient.Builder().build();
-              String url = authUrl.toString().replace("http://", "ws://").replace("https://", "wss://");
-              Request request = new Request.Builder().url(url).build();
-              for (int i = 0; i < 1; i++) {
-                  totalAnswer="";
-                  client.newWebSocket(request, new BigModelNew(i + "",
-                          false));
-              }
-          }else{
-              Thread.sleep(200);
-          }
-          return totalAnswer;
-      }
+        while (true){
+            if(totalFlag){
+                totalFlag=false;
+                NewQuestion=message;
+                // 构建鉴权url
+                String authUrl = getAuthUrl(hostUrl, apiKey, apiSecret);
+                OkHttpClient client = new OkHttpClient.Builder().build();
+                String url = authUrl.toString().replace("http://", "ws://").replace("https://", "wss://");
+                Request request = new Request.Builder().url(url).build();
+                for (int i = 0; i < 1; i++) {
+                    totalAnswer="";
+                    WebSocket webSocket = client.newWebSocket(request, new BigModelNew(i + "",
+                            false));
+                }
+            }else{
+                Thread.sleep(200);
+            }
+        }
     }
+
     public static boolean canAddHistory(){  // 由于历史记录最大上线1.2W左右，需要判断是能能加入历史
         int history_length=0;
         for(RoleContent temp:historyList){
@@ -135,10 +142,11 @@ public class BigModelNew extends WebSocketListener {
                 requestJson.put("header",header);
                 requestJson.put("parameter",parameter);
                 requestJson.put("payload",payload);
+//                  System.err.println(requestJson); // 可以打印看每次的传参明细
                 webSocket.send(requestJson.toString());
                 // 等待服务端返回完毕后关闭
                 while (true) {
-                    // System.err.println(wsCloseFlag + "---");
+//                     System.err.println(wsCloseFlag + "---");
                     Thread.sleep(200);
                     if (wsCloseFlag) {
                         break;
@@ -161,7 +169,7 @@ public class BigModelNew extends WebSocketListener {
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
-        // System.out.println(userId + "用来区分那个用户的结果" + text);
+//         System.out.println(userId + "用来区分那个用户的结果" + text);
         JsonParse myJsonParse = gson.fromJson(text, JsonParse.class);
         if (myJsonParse.header.code != 0) {
             System.out.println("发生错误，错误码为：" + myJsonParse.header.code);
@@ -169,14 +177,21 @@ public class BigModelNew extends WebSocketListener {
             webSocket.close(1000, "");
         }
         List<Text> textList = myJsonParse.payload.choices.text;
+//        System.out.println("完整答案1："+textList);
         for (Text temp : textList) {
             System.out.print(temp.content);
-            totalAnswer=totalAnswer+temp.content;
+            totalAnswer+=temp.content;
         }
         if (myJsonParse.header.status == 2) {
             // 可以关闭连接，释放资源
-            System.out.println();
-            System.out.println("*************************************************************************************");
+//            System.out.println("完整答案2："+totalAnswer);
+            aiMessage.setUserId(Long.parseLong(userId));
+            aiMessage.setLogo(2);
+            aiMessage.setContent(totalAnswer);
+            aiMessage.setSerialNumber(0L);
+            aiMessageService.save(aiMessage);
+//            System.out.println();
+//            System.out.println("*************************************************************************************");
             if(canAddHistory()){
                 RoleContent roleContent=new RoleContent();
                 roleContent.setRole("assistant");

@@ -109,6 +109,14 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
         log.info("当前用户角色为{}",roleList);
         return userId;
     }
+
+    @Override
+    public Long getUserByCurrent() {
+        if(!StpUtil.isLogin()){
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+        return Long.parseLong(StpUtil.getLoginId().toString());
+    }
 }
 
 

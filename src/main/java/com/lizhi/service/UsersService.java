@@ -51,4 +51,10 @@ public interface UsersService extends IService<Users> {
      * @return 用户id
      */
     Long isRoleGetUserById(UserByIdRequest userByIdRequest);
+
+    /**
+     * 检查当前用户是否登录 并返回当前用户id
+     * @return 用户id
+     */
+    Long getUserByCurrent();
 }

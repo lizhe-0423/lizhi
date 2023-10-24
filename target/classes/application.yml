@@ -42,7 +42,7 @@ spring:
     # Redis服务器连接密码（默认为空）
     password: lizhe@0110266577
     # 连接超时时间
-    timeout: 5000
+    timeout: 2000
   rabbitmq:
     host: 123.249.123.29
     port: 5672

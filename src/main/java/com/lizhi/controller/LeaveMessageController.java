@@ -1,7 +1,9 @@
 package com.lizhi.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
+import com.alibaba.excel.util.StringUtils;
 import com.lizhi.common.BaseResponse;
+import com.lizhi.common.BusinessException;
 import com.lizhi.common.ErrorCode;
 import com.lizhi.common.ResultUtils;
 import com.lizhi.model.entity.LeaveMessage;
@@ -34,16 +36,19 @@ public class LeaveMessageController {
      * @return BaseResponse<String>
      */
     @PostMapping("/add")
-    public BaseResponse<String> addLeaveMessage(@RequestParam String message){
-        if(StringUtils.isEmpty(message))
-        LeaveMessage leaveMessage = new LeaveMessage();
+    public BaseResponse<String> addLeaveMessage(@RequestParam String message) {
+        LeaveMessage leaveMessage = null;
+        if (StringUtils.isEmpty(message)) {
+            log.debug("No message");
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }leaveMessage = new LeaveMessage();
         leaveMessage.setMessage(message);
         leaveMessage.setUserId(Long.parseLong((String) StpUtil.getLoginId()));
-        if(leaveMessageService.save(leaveMessage)) {
+        if (leaveMessageService.save(leaveMessage)) {
             log.info("新增留言成功");
             return ResultUtils.success("留言新增成功");
         }
-        return ResultUtils.error(ErrorCode.SYSTEM_ERROR,"留言新增失败");
+        return ResultUtils.error(ErrorCode.SYSTEM_ERROR, "留言新增失败");
     }
 
     /**
